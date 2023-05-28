@@ -12,15 +12,20 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this._authRepo) : super(AuthLoading()) {
     on<LoginEvent>((event, emit) async {
       emit(AuthLoading());
-      final result = await _authRepo.login(event.email, event.password);
-      if (result != "Email Not found." && result != "Invalid Password!") {
-        print("Usuario autenticado");
-        emit(AuthSuccessful());
-      }
-      if (result == "Email Not found." || result == "Invalid Password!") {
-        print("Usuario o contraseña incorrectos");
-        emit(AuthFailed(message: "Usuario o contraseña incorrectos"));
+      try {
+        final result = await _authRepo.login(event.email, event.password);
+        if (result != "Email Not found." && result != "Invalid Password!") {
+          print("Usuario autenticado");
+          emit(AuthSuccessful());
+        } else {
+          print("Usuario o contraseña incorrectos");
+          emit(AuthFailed(message: "Usuario o contraseña incorrectos"));
+        }
+      } catch (e) {
+        print("Error durante el inicio de sesión: $e");
+        emit(AuthFailed(message: "Error durante el inicio de sesión"));
       }
     });
   }
 }
+

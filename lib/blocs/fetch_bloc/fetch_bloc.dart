@@ -12,10 +12,15 @@ part 'fetch_state.dart';
 class Fetchbloc extends Bloc<FetchEvent, FetchState> {
   Fetchbloc() : super(FetchInitial()) {
     final RepositoryFetchData _repo_fetch = RepositoryFetchData();
+    try{   
     on<FetchEvent>((event, emit) async {
       List<Students> student = await _repo_fetch.fetchStudent();
       print("${student}");
       emit(FetchSuccess(student: student));
     });
+  }
+  catch(e){
+    print(e);
+  }
   }
 }
