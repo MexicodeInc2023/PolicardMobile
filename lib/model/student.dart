@@ -13,11 +13,11 @@ class Students {
   late String createdAt;
   late String updatedAt;
   late int userId;
-  late List<EmergencyData> emergencyData;
-  late List<CareersData> careersData;
+  late List<EmergencyData>? emergencyData;
+  late List<CareersData>? careersData;
 
-  Students(
-      {required this.id,
+  Students({
+      required this.id,
       required this.name,
       required this.lastname,
       required this.enrolment,
@@ -27,7 +27,8 @@ class Students {
       this.active = true,
       required this.emergencyData,
       required this.careersData,
-      required this.userId});
+      required this.userId
+      });
 
   Students.fromJson(Map<String, dynamic> json) {
     id = json['id'];
@@ -39,6 +40,8 @@ class Students {
     city = json['city'];
     active = json['active'];
     userId = json['userId'];
+    careersData = (json['careersData'] as List).map((e) => CareersData.fromJson(e)).toList();
+    emergencyData = (json['emergencyData'] as List).map((e) => EmergencyData.fromJson(e)).toList();
   }
 
   Map<String, dynamic> toJson() {

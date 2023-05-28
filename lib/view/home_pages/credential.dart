@@ -81,7 +81,7 @@ class _CredentialState extends State<Credential> {
                                     margin: const EdgeInsets.only(top: 20.0)),
                                 Text(
                                   state
-                                      .student[0].careersData[index].nameCareer,
+                                      .student[0].careersData![index].nameCareer,
                                   style: const TextStyle(fontSize: 20),
                                 ),
                                 Container(
@@ -100,8 +100,8 @@ class _CredentialState extends State<Credential> {
                                 Container(
                                     margin: const EdgeInsets.only(top: 5.0)),
                                 Text(
-                                  '${state.student[0].emergencyData[index].allergy == "no one" ? "No hay alergias" : state.student[0].emergencyData[index].allergy}'
-                                  ' ${state.student[0].emergencyData[0].allergy2 == "no one" ? "" : state.student[0].emergencyData[index].allergy2}',
+                                  '${state.student[0].emergencyData![index].allergy == "no one" ? "No hay alergias" : state.student[0].emergencyData![index].allergy}'
+                                  ' ${state.student[0].emergencyData![0].allergy2 == "no one" ? "" : state.student[0].emergencyData![index].allergy2}',
                                   style: const TextStyle(fontSize: 20),
                                 ),
                                 Container(
@@ -114,7 +114,7 @@ class _CredentialState extends State<Credential> {
                                 Container(
                                     margin: const EdgeInsets.only(top: 5.0)),
                                 Text(
-                                  state.student[0].emergencyData[index]
+                                  state.student[0].emergencyData![index]
                                       .bloodType,
                                   style: const TextStyle(fontSize: 20),
                                 ),
@@ -128,7 +128,7 @@ class _CredentialState extends State<Credential> {
                                 Container(
                                     margin: const EdgeInsets.only(top: 5.0)),
                                 Text(
-                                  state.student[0].emergencyData[index]
+                                  state.student[0].emergencyData![index]
                                       .emergencyName,
                                   style: const TextStyle(fontSize: 20),
                                 ),
@@ -142,7 +142,7 @@ class _CredentialState extends State<Credential> {
                                 Container(
                                     margin: const EdgeInsets.only(top: 5.0)),
                                 Text(
-                                  state.student[0].emergencyData[index]
+                                  state.student[0].emergencyData![index]
                                       .emergencyPhone,
                                   style: const TextStyle(fontSize: 20),
                                 ),
@@ -156,7 +156,7 @@ class _CredentialState extends State<Credential> {
                                 Container(
                                     margin: const EdgeInsets.only(top: 5.0)),
                                 Text(
-                                  state.student[0].emergencyData[index]
+                                  state.student[0].emergencyData![index]
                                           .emergencyPhone2 ??
                                       "",
                                   style: const TextStyle(fontSize: 20),

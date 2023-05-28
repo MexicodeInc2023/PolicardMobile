@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:policard_mobile/blocs/auth_bloc/auth_bloc.dart';
 import 'package:policard_mobile/repository/repo_auth.dart';
 import 'package:policard_mobile/view/login.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});

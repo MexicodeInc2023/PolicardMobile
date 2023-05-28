@@ -16,11 +16,12 @@ class _ButtonState extends State<Button> {
         height: 50,
         width: 200,
         child: MaterialButton(
-            color: Colors.green,
+            color: Color(0xff00c850),
+            elevation: 4, 
             onPressed: widget.onPressed,
             child: Text(
               widget.text,
-              style: const TextStyle(color: Colors.black, fontSize: 20),
+              style: const TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold ),
             ),
             
             shape: OutlineInputBorder(

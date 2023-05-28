@@ -5,6 +5,7 @@ import 'package:policard_mobile/view/home.dart';
 import 'package:policard_mobile/view/widgets/button.dart';
 import 'package:policard_mobile/view/widgets/custom_textfield.dart';
 
+
 class Login extends StatefulWidget {
   const Login({super.key});
 
@@ -39,13 +40,16 @@ class _LoginState extends State<Login> {
               alignment: Alignment.center,
             ),
             const Center(
-                child: Text(
-              "Login",
-              style: TextStyle(
-                  fontSize: 35,
-                  color: Colors.deepPurple,
-                  fontWeight: FontWeight.bold),
-            )),
+                child:  Text(
+            "Iniciar Sesion ",
+            textAlign: TextAlign.center,
+            style: TextStyle(
+              color: Color(0xff5259f5),
+              fontSize: 34,
+              fontFamily: "Inter",
+              fontWeight: FontWeight.w800,
+        ),
+    ),),
             const SizedBox(
               height: 40,
             ),
