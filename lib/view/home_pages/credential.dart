@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:policard_mobile/base/api_base.dart';
 import 'package:policard_mobile/blocs/fetch_bloc/fetch_bloc.dart';
+import 'package:geolocator/geolocator.dart';
+import 'package:geocoding/geocoding.dart';
 
 class Credential extends StatefulWidget {
   const Credential({super.key});
@@ -13,17 +15,67 @@ class Credential extends StatefulWidget {
 class _CredentialState extends State<Credential> {
   final ApiBase _base = ApiBase();
   final Fetchbloc _bloc = Fetchbloc();
-  // Obtenemos el token de la API
+  /* Ubicación */
+  Position? _currentPosition;
+  String? _city;
+  String? _state;
+  String? _country;
 
-  /* _base.getData("api/user/student/1/", accessToken); */
-  /*   var accessToken = SharedData.responseJson; */
   @override
   void initState() {
     super.initState();
     _bloc.add(GetStudent());
+    _getCurrentLocation();
   }
 
+  /* Obtenemos la ubicación */
+  Future<void> _getCurrentLocation() async {
+    bool serviceEnabled;
+    LocationPermission permission;
 
+    // Verificar si el servicio de ubicación está habilitado
+    serviceEnabled = await Geolocator.isLocationServiceEnabled();
+    if (!serviceEnabled) {
+       print('Servicio de ubicación deshabilitado');
+      return;
+    }
+
+    // Verificar y solicitar permiso de ubicación
+    permission = await Geolocator.checkPermission();
+    if (permission == LocationPermission.denied) {
+      permission = await Geolocator.requestPermission();
+      if (permission == LocationPermission.denied) {
+        print('Permiso de ubicación denegado');
+       return;
+      }
+    }
+
+    if (permission == LocationPermission.deniedForever) {
+        print('Permiso de ubicación denegado para siempre :(');
+       return; 
+    }
+
+    // Obtener la ubicación actual
+    Position position = await Geolocator.getCurrentPosition(
+      desiredAccuracy: LocationAccuracy.high,
+    );
+
+    setState(() {
+      _currentPosition = position;
+    });
+
+    // Obtener el nombre de la ubicación (ciudad, estado, etc.)
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      position.latitude,
+      position.longitude,
+    );
+
+    setState(() {
+      _country = placemarks.first.country;
+      _city = placemarks.first.locality;
+      _state = placemarks.first.administrativeArea;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -89,8 +141,10 @@ class _CredentialState extends State<Credential> {
                                 Container(
                                     margin: const EdgeInsets.only(top: 20.0)),
                                 Text(
-                                  state.student[0].birthdate,
-                                  style: const TextStyle(fontSize: 20),
+                                    _city != null && _state != null
+                                        ? '$_city, $_state, $_country' // Mostrar ciudad y estado si están disponibles
+                                        : 'Ubicación no disponible',
+                                    style: const TextStyle(fontSize: 20),
                                 ),
                                 Container(
                                     margin: const EdgeInsets.only(top: 20.0)),
@@ -146,21 +200,6 @@ class _CredentialState extends State<Credential> {
                                 Text(
                                   state.student[0].emergencyData![index]
                                       .emergencyPhone,
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                                Container(
-                                    margin: const EdgeInsets.only(top: 20.0)),
-                                const Text(
-                                  "Numero de emergencia 2:",
-                                  style: TextStyle(
-                                      fontSize: 20, color: Colors.deepPurple),
-                                ),
-                                Container(
-                                    margin: const EdgeInsets.only(top: 5.0)),
-                                Text(
-                                  state.student[0].emergencyData![index]
-                                          .emergencyPhone2 ??
-                                      "",
                                   style: const TextStyle(fontSize: 20),
                                 ),
                                 Container(

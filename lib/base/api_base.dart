@@ -56,6 +56,10 @@ class ApiBase {
       else if (e is http.ClientException && e.toString().contains('404')) {
         return {'error': 'No encontrado'};
       }
+       // Si la excepción es debido a la falta de conexión, devolvemos un mensaje de error
+      else if (e is http.ClientException) {
+        return {'error': 'No hay conexión'};
+      }
       // De lo contrario, propaga la excepción.
       else {
         rethrow;
