@@ -36,7 +36,7 @@ class _CredentialState extends State<Credential> {
     // Verificar si el servicio de ubicación está habilitado
     serviceEnabled = await Geolocator.isLocationServiceEnabled();
     if (!serviceEnabled) {
-       print('Servicio de ubicación deshabilitado');
+      print('Servicio de ubicación deshabilitado');
       return;
     }
 
@@ -46,13 +46,13 @@ class _CredentialState extends State<Credential> {
       permission = await Geolocator.requestPermission();
       if (permission == LocationPermission.denied) {
         print('Permiso de ubicación denegado');
-       return;
+        return;
       }
     }
 
     if (permission == LocationPermission.deniedForever) {
-        print('Permiso de ubicación denegado para siempre :(');
-       return; 
+      print('Permiso de ubicación denegado para siempre :(');
+      return;
     }
 
     // Obtener la ubicación actual
@@ -60,21 +60,24 @@ class _CredentialState extends State<Credential> {
       desiredAccuracy: LocationAccuracy.high,
     );
 
-    setState(() {
-      _currentPosition = position;
-    });
+    if (mounted) {
+      setState(() {
+        _currentPosition = position;
+      });
+    }
 
     // Obtener el nombre de la ubicación (ciudad, estado, etc.)
     List<Placemark> placemarks = await placemarkFromCoordinates(
       position.latitude,
       position.longitude,
     );
-
-    setState(() {
-      _country = placemarks.first.country;
-      _city = placemarks.first.locality;
-      _state = placemarks.first.administrativeArea;
-    });
+    if (mounted) {
+      setState(() {
+        _country = placemarks.first.country;
+        _city = placemarks.first.locality;
+        _state = placemarks.first.administrativeArea;
+      });
+    }
   }
 
   @override
@@ -134,17 +137,17 @@ class _CredentialState extends State<Credential> {
                                 Container(
                                     margin: const EdgeInsets.only(top: 20.0)),
                                 Text(
-                                  state
-                                      .student[0].careersData![index].nameCareer,
+                                  state.student[0].careersData![index]
+                                      .nameCareer,
                                   style: const TextStyle(fontSize: 20),
                                 ),
                                 Container(
                                     margin: const EdgeInsets.only(top: 20.0)),
                                 Text(
-                                    _city != null && _state != null
-                                        ? '$_city, $_state, $_country' // Mostrar ciudad y estado si están disponibles
-                                        : 'Ubicación no disponible',
-                                    style: const TextStyle(fontSize: 20),
+                                  _city != null && _state != null
+                                      ? '$_city, $_state, $_country' // Mostrar ciudad y estado si están disponibles
+                                      : 'Ubicación no disponible',
+                                  style: const TextStyle(fontSize: 20),
                                 ),
                                 Container(
                                     margin: const EdgeInsets.only(top: 20.0)),

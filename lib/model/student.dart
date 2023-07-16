@@ -40,9 +40,12 @@ class Students {
     city = json['city'];
     active = json['active'];
     userId = json['userId'];
-    careersData = (json['careersData'] as List).map((e) => CareersData.fromJson(e)).toList();
-    emergencyData = (json['emergencyData'] as List).map((e) => EmergencyData.fromJson(e)).toList();
-  }
+    careersData = (json['careersData'] as List<dynamic>?)
+        ?.map((e) => CareersData.fromJson(e))
+        .toList();
+    emergencyData = (json['emergencyData'] as List<dynamic>?)
+        ?.map((e) => EmergencyData.fromJson(e))
+        .toList();}
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{};
