@@ -1,9 +1,12 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:policard_mobile/base/api_base.dart';
 import 'package:policard_mobile/blocs/fetch_bloc/fetch_bloc.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:geocoding/geocoding.dart';
+import 'package:sensors_plus/sensors_plus.dart';
 
 class Credential extends StatefulWidget {
   const Credential({super.key});
@@ -20,14 +23,28 @@ class _CredentialState extends State<Credential> {
   String? _city;
   String? _state;
   String? _country;
+  /* Giroscopio */
+  List<double>? _gyroscopeValues;
+  late StreamSubscription<GyroscopeEvent> _gyroscopeSubscription;
 
   @override
   void initState() {
     super.initState();
     _bloc.add(GetStudent());
     _getCurrentLocation();
+    _gyroscopeSubscription =
+        gyroscopeEvents.listen((GyroscopeEvent event) {
+      setState(() {
+        _gyroscopeValues = <double>[event.x, event.y, event.z];
+      });
+    });
   }
 
+   @override
+  void dispose() {
+    _gyroscopeSubscription.cancel();
+    super.dispose();
+  }
   /* Obtenemos la ubicación */
   Future<void> _getCurrentLocation() async {
     bool serviceEnabled;
@@ -96,8 +113,12 @@ class _CredentialState extends State<Credential> {
                   return ListView.builder(
                       itemCount: 1,
                       itemBuilder: (context, index) {
-                        return Card(
-                            margin: const EdgeInsets.all(16.0),
+                        final gyroscope =
+                      _gyroscopeValues?.map((double v) => v.toStringAsFixed(1)).toList();
+                  return Transform.rotate(
+                    angle: (_gyroscopeValues?.last ?? 0) * 0.1, // Ajusta el factor de rotación según sea necesario
+                    child: Card(
+                          margin: const EdgeInsets.all(16.0),
                             child: Column(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: <Widget>[
@@ -208,7 +229,8 @@ class _CredentialState extends State<Credential> {
                                 Container(
                                     margin: const EdgeInsets.only(top: 20.0)),
                               ],
-                            ));
+                            ))
+                  );
                       });
                 }
                 return const Center(child: CircularProgressIndicator());
